@@ -1,16 +1,17 @@
 package com.nojava.servlet;
 
 import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-
-public class ServletTest1 extends HttpServlet {
+@WebServlet(name = "test2",urlPatterns = "/test2")
+public class ServletTest2 extends HttpServlet {
 
     @Override
     public void init() throws ServletException {
-        System.out.println("ServletTest1初始化");
+        System.out.println("ServletTest2");
     }
 
     @Override

@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://java.sun.com/xml/ns/javaee" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" id="WebApp_ID" version="2.5">
-  <display-name>jd1617_servlet</display-name>
+<web-app xmlns="http://java.sun.com/xml/ns/javaee"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://java.sun.com/xml/ns/javaee
+         http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
+         version="3.0">
+  <display-name>111</display-name>
   <welcome-file-list>
     <welcome-file>index.html</welcome-file>
     <welcome-file>index.htm</welcome-file>
@@ -10,12 +14,12 @@
     <welcome-file>default.jsp</welcome-file>
   </welcome-file-list>
   <context-param>
-    <param-name>contextConfigLocation</param-name>
-    <param-value>
-      classpath:spring_dao.xml
-      classpath:spring_service.xml
-      classpath:spring_redis.xml
-    </param-value>
+    <param-name>param1</param-name>
+    <param-value>value1</param-value>
+  </context-param>
+  <context-param>
+    <param-name>param2</param-name>
+    <param-value>value2</param-value>
   </context-param>
   <servlet>
     <servlet-name>test1</servlet-name>
@@ -27,7 +31,7 @@
   </servlet-mapping>
 
 
-<!--  <filter>
+  <filter>
     <filter-name>encodingFilter</filter-name>
     <filter-class>com.nojava.servlet.EncodingFilter</filter-class>
   </filter>
@@ -35,7 +39,7 @@
   <filter-mapping>
     <filter-name>encodingFilter</filter-name>
     <url-pattern>/*</url-pattern>
-  </filter-mapping>-->
+  </filter-mapping>
 
   <listener>
     <listener-class>com.nojava.servlet.ApplicationListener</listener-class>

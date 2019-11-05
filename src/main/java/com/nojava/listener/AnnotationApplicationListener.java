@@ -1,4 +1,4 @@
-package com.nojava.servlet;
+package com.nojava.listener;
 
 import javax.servlet.ServletContextAttributeEvent;
 import javax.servlet.ServletContextAttributeListener;

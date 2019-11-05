@@ -6,6 +6,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.io.PrintWriter;
+
 @WebServlet(name = "test2",urlPatterns = "/test2")
 public class ServletTest2 extends HttpServlet {
 
@@ -18,13 +20,15 @@ public class ServletTest2 extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
         String param_name=getServletContext().getInitParameter("param1");
-        System.out.println("param_name:"+param_name);
+        System.out.println("ServletTest2——param_name:"+param_name);
 
         this.doPost(req,resp);
     }
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-
+        PrintWriter writer = resp.getWriter();
+        writer.println("ServletTest2");
+        writer.close();
     }
 }

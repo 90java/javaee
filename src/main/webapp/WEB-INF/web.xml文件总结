@@ -2,9 +2,10 @@
 https://blog.csdn.net/xiaohangblog/article/details/72868659 ***
 https://blog.csdn.net/zq17865815296/article/details/79464403
 https://www.cnblogs.com/vincentren/p/10753217.html
-一般web项目中会存在一个web.xml,文件中会配置上下文信息-servlet-Listener-Filter等等配置,这个文件会在项目启动的时候进行加载，但是该文件不是必须的，因为没有该配置文件时，项目也是可以启动起来的。
+一般web项目中会存在一个web.xml,文件中会配置上下文信息（servlet-Listener-Filter）等等配置,这个文件会在项目启动的时候进行加载，但是该文件不是必须的，
+因为没有该配置文件时，项目也是可以启动起来的。
 在使用tomcat服务器启动时，tomcat会先加载本身的一些配置文件，tomcat中也会有一个web.xml文件。这个文件相当于全局的。项目中也会存在web.xml
-，该文件只针对该项目应用，在这个项目中优先级高于tomcat中的web.xml。
+，该文件只针对该项目应用，在这个项目中优先级高于tomcat中的web.xml，就是项目中的配置覆盖tomcat的配置。
 
 在servlet3.0新特性 会存在好多新的注解类。所以在不需要web.xml时也可以写servlet。但是在使用时注意版本号。
 http://tomcat.apache.org/whichversion.html 该地址可以可出服务器版本和servlet jsp版本
@@ -15,7 +16,6 @@ HttpServletRequest 对文件上传的支持 【其实没啥用，已经有解决
 ServletContext 的性能增强 【实现代码加载Servlet、过滤器、监听器】
 
 web.xml为sun公司制定。根目录为<web-app>
-
 servlet 2.3
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE web-app PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN" "http://java.sun.com/dtd/web-app_2_3.dtd">
@@ -73,6 +73,25 @@ web项目中一个重要的对象 ServletContext:servlet上下文.tomcat启动�
 
 web.xml配置和servlet3.0新增的注解一样 在项目启动过程会扫描注解和配置
 
+从servlet3.0开始，web容器启动时为提供给第三方组件机会做一些初始化的工作，例如注册servlet或者filtes等，servlet规范中通过ServletContainerInitializer实现此功能。
+每个框架要使用ServletContainerInitializer就必须在对应的jar包的META-INF/services 目录创建一个名为javax.servlet.ServletContainerInitializer的文件，
+文件内容指定具体的ServletContainerInitializer实现类，那么，当web容器启动时就会运行这个初始化器做一些组件内的初始化工作。
+一般伴随着ServletContainerInitializer一起使用的还有HandlesTypes注解，通过HandlesTypes可以将感兴趣的一些类注入到ServletContainerInitializerde
+的onStartup方法作为参数传入。
+SpringServletContainerInitializer
+通过源码发现，配合注解@HandlesTypes它可以将其指定的Class对象作为参数传递到onStartup方法中。进而在onStartup方法中获取Class对象的具体实现类，
+进而调用实现类中的具体方法。SpringServletContainerInitializer类中@HandlesTypes指定的是Class对象是WebApplicationInitializer.Class。
+利用这个机制，若实现WebApplicationInitializer这个接口，我们就可以自定义的注入Servlet，或者Filter，即可以不再依赖web.xml的配置。
+
+如果配置web.xml
+加载顺序：
+    ServletContext（tomcat启动会给每一应用创建一个ServletContext对象）--->context-param--->listener--->filter--->servlet
+java代码：
+    先启动ServletContainerInitializer实现类
+    大概顺序 (依赖java SPI机制) tomcat 读取-->依赖jar /META-INF/services/javax.servlet.ServletContainerInitializer-->读取实现类org.springframework.web.SpringServletContainerInitializer
+    --->通过@HandlesTypes(WebApplicationInitializer.class)注解 将WebApplicationInitializer实现类(实现类中添加各种listener--->filter--->servlet)作为参数传到onStartup方法 去启动加载到ServletContext
+
+
 web.xml节点
 1.<context-param></context-param>
 一对参数名和参数值，用作应用的servlet上下文初始化参数。参数名在整个Web应用中必须是惟一的。可以设置多个。tomcat启动会将该键值对放到servlet上下文中。
@@ -87,7 +106,7 @@ web.xml节点
 listener元素用来注册一个监听器类，可以在Web应用中包含该类。使用listener元素，可以收到事件什么时候发生以及用什么作为响应的通知。
 监听web中的一些事件的发生,如果某些事件一旦发生了,那么这个监听器就会调用指定方法进行处理.
   <listener>
-    <listener-class>com.nojava.servlet.ApplicationListener</listener-class>
+    <listener-class>com.nojava.listener.ApplicationListener</listener-class>
   </listener>
 该监听类要实现ServletContextListener接口
 注解：@WebListener
@@ -96,7 +115,7 @@ listener元素用来注册一个监听器类，可以在Web应用中包含该类
 是否已经登录的验证等等),最后filter再决定是否要让这个请求去访问那个资源.
   <filter>
     <filter-name>encodingFilter</filter-name>
-    <filter-class>com.nojava.servlet.EncodingFilter</filter-class>
+    <filter-class>com.nojava.filter.EncodingFilter</filter-class>
   </filter>
   <filter-mapping>
     <filter-name>encodingFilter</filter-name>

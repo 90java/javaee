@@ -1,5 +1,7 @@
 package com.nojava.servlet;
 
+import com.nojava.bean.Bean01;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -9,6 +11,8 @@ import java.util.List;
 public class StaticClassTest {
 
     static List<String> a = new ArrayList<>();
+
+    static Bean01 bean01 = new Bean01();
 
     static {
         inita();
@@ -23,5 +27,9 @@ public class StaticClassTest {
         System.out.println("结束");
     }
 
+    public static void a(){
+        System.out.println(a);
+        System.out.println(bean01);
+    }
 
 }

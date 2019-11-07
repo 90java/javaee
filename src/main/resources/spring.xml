@@ -1,11 +1,107 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
-	xmlns:context="http://www.springframework.org/schema/context" 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	   xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:context="http://www.springframework.org/schema/context"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans
            http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
-           http://www.springframework.org/schema/context
-           http://www.springframework.org/schema/context/spring-context-3.2.xsd">
-	
+		   http://www.springframework.org/schema/context
+		   http://www.springframework.org/schema/context/spring-context-3.2.xsd
+		   http://www.springframework.org/schema/aop
+		   http://www.springframework.org/schema/aop/spring-aop-3.2.xsd">
+
+	<bean id="student" class="com.nojava.bean.Student">
+		<property name="name" value="aaa"></property>
+		<property name="age" value="1"></property>
+	</bean>
+
+	<bean id="teacher" class="com.nojava.bean.Teacher" autowire="byType">
+		<property name="name" value="ttt"></property>
+		<property name="age" value="22"></property>
+	</bean>
+
+	<!-- 读取properties文件 -->
+	<bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="location">
+			<value>classpath:db.properties</value>
+		</property>
+	</bean>
+
+	<!--切面类-->
+	<bean id="logger" class="com.nojava.test.aop.MyLogger"></bean>
+
+	<!--配置目标对象-->
+	<bean id="aopTest" class="com.nojava.test.aop.AopTest"></bean>
+
+	<!--前置通知（Before advice）-->
+	<bean id="beforeAdvice" class="com.nojava.test.aop.BeforeAdvice">
+		<property name="logger" ref="logger"></property>
+	</bean>
+	<!--返回后通知(After returning advice)-->
+	<bean id="afterAdvice" class="com.nojava.test.aop.AfterAdvice">
+		<property name="logger" ref="logger"></property>
+	</bean>
+	<!--环绕通知-->
+	<bean id="aroundAdvice" class="com.nojava.test.aop.AroundAdvice">
+		<property name="logger" ref="logger"></property>
+	</bean>
+
+	<!--抛出异常后通知(After throwing advice)-->
+	<bean id="throwsAdvice" class="com.nojava.test.aop.ThrowsAdvice">
+		<property name="logger" ref="logger"></property>
+	</bean>
+
+	<!--代理类 三个参数分别表示目标类 实现的接口 通知-->
+	<bean id="proxy1" class="org.springframework.aop.framework.ProxyFactoryBean">
+		<property name="target" ref="aopTest"></property>
+		<property name="interfaces">
+			<list>
+				<value>com.nojava.test.aop.IAopTest</value>
+			</list>
+		</property>
+		<property name="interceptorNames">
+			<list>
+				<!--引用通知顺序会影响执行切面方法的顺序-->
+				<value>aroundAdvice</value>
+				<value>beforeAdvice</value>
+				<value>afterAdvice</value>
+				<value>throwsAdvice</value>
+			</list>
+		</property>
+	</bean>
+
+
+	<!--1,<aop:pointcut>+<aop:advisor>-->
+	<!-- 配置aop的代理 -->
+	<aop:config>
+		<!-- 定义一个切入点 并给切入点起名为myPointCut -->
+		<!-- 切入点是一组连接点的集合 -->
+		<aop:pointcut id="myPointCut" expression="execution(* com.nojava.test.aop..*.*())"/>
+		<!-- 定义哪一个advice在哪一个切入点上面起作用 -->
+		<aop:advisor advice-ref="beforeAdvice" pointcut-ref="myPointCut"></aop:advisor>
+	</aop:config>
+
+
+	<bean id="xmlHandler" class="com.nojava.test.aop.aopconfigXml.XmlHandler">
+	</bean>
+	<!--2,<aop:pointcut>+<aop:aspect>+<aop:after method="" />-->
+	<!-- 配置aop的代理 -->
+	<aop:config>
+		<!-- 定义一个切入点 并给切入点起名为myPointCut -->
+		<!-- 切入点是一组连接点的集合 -->
+		<aop:pointcut id="myPointCut" expression="execution(* com.nojava.test.aop..*.*())"/>
+		<aop:aspect id="aspect" ref="xmlHandler">
+			<!-- 表示beforeAdvice会把切面类handler中的beforeTest方法织入到名字叫myPointCut的切入点上面 -->
+			<aop:before method="beforeTest" pointcut-ref="myPointCut"/>
+			<!-- throwing="ex"表示throwingTest方法中接收异常对象的名字一定要是ex -->
+			<aop:after-throwing method="throwingTest" pointcut-ref="myPointCut" throwing="ex"></aop:after-throwing>
+			<!-- after表示不管方法是否正常结束都会起作用 -->
+			<aop:after method="afterTest" pointcut-ref="myPointCut"></aop:after>
+			<!-- after-returning表示方法正常结束才会起作用(抛异常时候不起作用) -->
+			<aop:after-returning method="afterReturningTest" pointcut-ref="myPointCut"/>
+		</aop:aspect>
+	</aop:config>
+
+
 
 </beans>

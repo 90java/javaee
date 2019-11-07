@@ -1,0 +1,14 @@
+spring
+目标
+1.从ioc到aop
+2.从配置文件到java配置
+3.从单一spring到spring与各种框架整合
+-----------
+1.从ioc到aop
+1.1 ioc
+   1.1.1 注入方式
+   set 构造器  自动注入 注解
+   自动注入:autowire="byName": 通过属性名和容器找同名的然后注入
+            autowire="byType": 通过set方法参数找同名的然后注入
+            default-autowire="byName" 根节点设置 那个该配置文件都通过byName注入  如果某个bean不想被注入可以使用autowire="no"
+   1.1.2 继承方式

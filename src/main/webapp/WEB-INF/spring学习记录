@@ -11,4 +11,11 @@ spring
    自动注入:autowire="byName": 通过属性名和容器找同名的然后注入
             autowire="byType": 通过set方法参数找同名的然后注入
             default-autowire="byName" 根节点设置 那个该配置文件都通过byName注入  如果某个bean不想被注入可以使用autowire="no"
-   1.1.2 继承方式
+1.2 aop
+    1.2.1
+        代理模式代码实现
+    1.2.2
+
+
+    1.2.3
+

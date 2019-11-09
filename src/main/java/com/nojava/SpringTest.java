@@ -5,7 +5,9 @@ import com.nojava.bean.Teacher;
 import com.nojava.config.SpringConfig;
 import com.nojava.event.RainEvent;
 import com.nojava.test.aop.AopTest;
+import com.nojava.test.aop.AopTest2;
 import com.nojava.test.aop.IAopTest;
+import com.nojava.test.aop.annotation.AopConfig;
 import org.junit.Test;
 import org.springframework.cglib.proxy.Enhancer;
 import org.springframework.cglib.proxy.MethodInterceptor;
@@ -126,6 +128,24 @@ public class SpringTest {
      */
     @Test
     public void test07(){
+        AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(AopConfig.class);
+//        IAopTest aopTest = (IAopTest)context.getBean("aopTest");
+        //被代理时，委托类使用自己类接收时报错， 因为被代理了只有使用接口去接收
+        IAopTest aopTest = (IAopTest)context.getBean("aopTest");
+        aopTest.add();
+
+    }
+
+    /**
+     * 测试委托类没有接口时  使用哪种代理
+     * 没有接口时 直接可以使用自己类接收，因为使用的cglib动态代理，代理类是委托类的子类
+     */
+    @Test
+    public void test08(){
+        AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(AopConfig.class);
+//        IAopTest aopTest = (IAopTest)context.getBean("aopTest");
+        AopTest2 aopTest = (AopTest2)context.getBean("aopTest2");
+        aopTest.add();
 
     }
 

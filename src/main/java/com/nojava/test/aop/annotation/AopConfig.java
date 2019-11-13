@@ -6,7 +6,7 @@ import org.springframework.context.annotation.*;
 
 @Configuration
 @ComponentScan(value = {"com.nojava.test.aop"})
-@EnableAspectJAutoProxy
+@EnableAspectJAutoProxy   //<aop:aspectj-autoproxy/>
 public class AopConfig {
 
     @Bean

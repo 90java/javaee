@@ -1,5 +1,6 @@
 package com.nojava;
 
+import com.mchange.v2.c3p0.ComboPooledDataSource;
 import com.nojava.bean.Student;
 import com.nojava.bean.Teacher;
 import com.nojava.config.SpringConfig;
@@ -8,6 +9,8 @@ import com.nojava.test.aop.AopTest;
 import com.nojava.test.aop.AopTest2;
 import com.nojava.test.aop.IAopTest;
 import com.nojava.test.aop.annotation.AopConfig;
+import oracle.jdbc.pool.OracleConnectionPoolDataSource;
+import org.apache.commons.dbcp.BasicDataSource;
 import org.junit.Test;
 import org.springframework.cglib.proxy.Enhancer;
 import org.springframework.cglib.proxy.MethodInterceptor;
@@ -15,9 +18,15 @@ import org.springframework.cglib.proxy.MethodProxy;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
+import javax.sql.DataSource;
+import javax.sql.PooledConnection;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 
 public class SpringTest {
 
@@ -147,6 +156,113 @@ public class SpringTest {
         AopTest2 aopTest = (AopTest2)context.getBean("aopTest2");
         aopTest.add();
 
+    }
+
+    @Test
+    public void test09() throws SQLException {
+        ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("spring_datasource.xml");
+        OracleConnectionPoolDataSource dataSource = (OracleConnectionPoolDataSource)context.getBean("datasource1");
+        PooledConnection pooledConnection = dataSource.getPooledConnection();
+
+
+        Connection connection1 = pooledConnection.getConnection();
+        Statement statement = connection1.createStatement();
+        ResultSet resultSet = statement.executeQuery("select * from student");
+        while (resultSet.next()){
+
+            String string = resultSet.getString(3);
+            System.out.println(string);
+        }
+
+
+        resultSet.close();
+        connection1.close();
+
+    }
+
+    @Test
+    public void test10() throws SQLException {
+        ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("spring_datasource.xml");
+        BasicDataSource dataSource = (BasicDataSource)context.getBean("datasource2");
+
+        System.out.println(dataSource.getNumActive());
+        System.out.println(dataSource.getNumIdle());
+        System.out.println("-------------------");
+
+        Connection connection1 = dataSource.getConnection();
+        System.out.println(dataSource.getNumActive());
+        System.out.println(dataSource.getNumIdle());
+        System.out.println(connection1);
+        System.out.println("-------------------");
+        Connection connection2 = dataSource.getConnection();
+        System.out.println(dataSource.getNumActive());
+        System.out.println(dataSource.getNumIdle());
+        System.out.println(connection2);
+        System.out.println("-------------------");
+        Connection connection3 = dataSource.getConnection();
+        System.out.println(dataSource.getNumActive());
+        System.out.println(dataSource.getNumIdle());
+        System.out.println(connection3);
+        System.out.println("-------------------");
+        connection1.close();
+        System.out.println(dataSource.getNumActive());
+        System.out.println(dataSource.getNumIdle());
+        System.out.println("-------------------");
+        Connection connection4 = dataSource.getConnection();
+        System.out.println(connection4);
+        System.out.println(dataSource.getNumActive());
+        System.out.println(dataSource.getNumIdle());
+
+    }
+
+    @Test
+    public void test11() throws SQLException {
+        ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("spring_datasource.xml");
+        DataSource dataSource = (DataSource)context.getBean("datasource3");
+        Connection connection = dataSource.getConnection();
+        System.out.println(connection);
+        Statement statement = connection.createStatement();
+        ResultSet resultSet = statement.executeQuery("select * from student");
+        while (resultSet.next()){
+            String string = resultSet.getString(3);
+            System.out.println(string);
+        }
+        resultSet.close();
+        connection.close();
+    }
+
+    @Test
+    public void test12() throws SQLException {
+        ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("spring_datasource.xml");
+        DataSource dataSource = (DataSource)context.getBean("datasource4");
+        Connection connection = dataSource.getConnection();
+        System.out.println(connection);
+        Statement statement = connection.createStatement();
+        ResultSet resultSet = statement.executeQuery("select * from student");
+        while (resultSet.next()){
+            String string = resultSet.getString(3);
+            System.out.println(string);
+        }
+        resultSet.close();
+        connection.close();
+    }
+
+    @Test
+    public void test13() throws SQLException {
+        ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("spring_datasource.xml");
+        DataSource dataSource = (DataSource)context.getBean("datasource5");
+        Connection connection = dataSource.getConnection();
+        Connection connection1 = dataSource.getConnection();
+        System.out.println(connection);
+        Statement statement = connection.createStatement();
+        ResultSet resultSet = statement.executeQuery("select * from student");
+        while (resultSet.next()){
+            String string = resultSet.getString(3);
+            System.out.println(string);
+        }
+        connection1.close();
+        resultSet.close();
+        connection.close();
     }
 
 }

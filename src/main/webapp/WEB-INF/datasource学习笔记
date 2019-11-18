@@ -1,1 +1,28 @@
 spring_datasource.xml 各种数据源配置
+
+遇到一个问题 在db.properties配置文件中设置了一个username=xxx时，然后使用数据源会报错。换成jdbc.username没有报错。
+
+jndi 配置步骤
+1.需在启动服务器上部署数据源 并且测试配置成功 并且将数据源赋给一个服务器或者集群
+2.web.xml配置
+  <resource-ref>
+    <description>DB Connection</description>
+    <res-ref-name>jdbc/jndi</res-ref-name>
+    <res-type>javax.sql.DataSource</res-type>
+    <res-auth>Container</res-auth>
+  </resource-ref>
+3.与spring配置数据源
+	<bean id="datasource6" class="org.springframework.jndi.JndiObjectFactoryBean">
+		<property name="jndiName" value="java:comp/env/jdbc/jndi"></property>
+	</bean>
+
+	org.springframework.jndi.JndiObjectFactoryBean/name="jndiName" 固定
+	value:  java:comp/env/ 都是固定值
+
+
+
+
+
+
+4.多数据源动态切换实现方式
+使用AbstractRoutingDataSource实现类+AOP

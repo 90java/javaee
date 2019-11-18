@@ -47,16 +47,16 @@ public class AnnotationHandler {
 	@AfterReturning("myPointCut()")
 	public void afterReturningTest(JoinPoint p){
 		
-		System.out.println(p.getSignature().getName()+" afterReturning");
+		System.out.println("anno_aop:"+p.getSignature().getName()+" afterReturning");
 		
 	}
 	
 	@Around("myPointCut()")
 	public Object aroundTest(ProceedingJoinPoint pjp)throws Throwable{
-		System.out.println(pjp.getSignature().getName()+" is start..");
+		System.out.println("anno_aop:"+pjp.getSignature().getName()+" is start..");
 		//调用连接点的方法去执行
 		Object obj = pjp.proceed();
-		System.out.println(pjp.getSignature().getName()+" is end..");
+		System.out.println("anno_aop:"+pjp.getSignature().getName()+" is end..");
 		return obj;
 	}
 	
@@ -65,7 +65,7 @@ public class AnnotationHandler {
 	//在切入点中的方法执行期间抛出异常的时候,会调用这个@AfterThrowing注解所标注的方法
 	@AfterThrowing(value="myPointCut()",throwing="ex")
 	public void throwingTest(JoinPoint p,Exception ex){
-		System.out.println(p.getSignature().getName()+" is throwing..."+ex.getMessage());
+		System.out.println("anno_aop:"+p.getSignature().getName()+" is throwing..."+ex.getMessage());
 		
 	}
 	

@@ -11,6 +11,7 @@ public class AopConfig {
 
     @Bean
     public IAopTest aopTest(){
+        System.out.println("java_config aopTest()");
         return new AopTest();
 
     }

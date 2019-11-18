@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	   xmlns:tx="http://www.springframework.org/schema/tx"
 	   xmlns:aop="http://www.springframework.org/schema/aop"
 	xmlns:context="http://www.springframework.org/schema/context"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans
@@ -8,7 +9,12 @@
 		   http://www.springframework.org/schema/context
 		   http://www.springframework.org/schema/context/spring-context-3.2.xsd
 		   http://www.springframework.org/schema/aop
-		   http://www.springframework.org/schema/aop/spring-aop-3.2.xsd">
+		   http://www.springframework.org/schema/aop/spring-aop-3.2.xsd
+	   http://www.springframework.org/schema/tx
+	   http://www.springframework.org/schema/tx/spring-tx-3.2.xsd">
+
+	<context:annotation-config></context:annotation-config>
+	<context:component-scan base-package="com.nojava"></context:component-scan>
 
 
 
@@ -116,13 +122,73 @@
 		<property name = "removeAbandonedTimeout" value ="${removeAbandonedTimeout}" />
 		<!-- 关闭 abanded 连接时输出错误日志 -->
 		<!--		<property name = "logAbandoned" value = "${logAbandoned}" />-->
-
 	</bean>
 
-	<!--jndi数据源-->
-	<!--<bean id="datasource6" class="org.springframework.jndi.JndiObjectFactoryBean">
+	<bean id="datasource6" class="com.alibaba.druid.pool.DruidDataSource" destroy-method="close">
+		<!-- 数据库基本信息配置 -->
+		<property name="url"><value>${jdbc.url}</value></property>
+		<property name = "username" value = "${jdbc.username1}" />
+		<property name = "password" value = "${jdbc.password1}" />
+		<property name = "driverClassName" value = "${driverClassName}" />
+		<property name = "filters" value = "${filters}" />
+		<!-- 最大并发连接数 -->
+		<property name = "maxActive" value = "${maxActive}" />
+		<!-- 初始化连接数量 -->
+		<property name = "initialSize" value = "${initialSize}" />
+		<!-- 配置获取连接等待超时的时间 -->
+		<property name = "maxWait" value = "${maxWait}" />
+		<!-- 最小空闲连接数 -->
+		<property name = "minIdle" value = "${minIdle}" />
+		<!-- 配置间隔多久才进行一次检测，检测需要关闭的空闲连接，单位是毫秒 -->
+		<property name = "timeBetweenEvictionRunsMillis" value ="${timeBetweenEvictionRunsMillis}" />
+		<!-- 配置一个连接在池中最小生存的时间，单位是毫秒 -->
+		<property name = "minEvictableIdleTimeMillis" value ="${minEvictableIdleTimeMillis}" />
+		<!--<property name = "validationQuery" value = "${validationQuery}" />-->
+		<property name = "maxOpenPreparedStatements" value ="${maxOpenPreparedStatements}" />
+		<!-- 打开 removeAbandoned 功能 -->
+		<property name = "removeAbandoned" value = "${removeAbandoned}" />
+		<!-- 1800 秒，也就是 30 分钟 -->
+		<property name = "removeAbandonedTimeout" value ="${removeAbandonedTimeout}" />
+		<!-- 关闭 abanded 连接时输出错误日志 -->
+		<!--		<property name = "logAbandoned" value = "${logAbandoned}" />-->
+	</bean>
 
+	<!--jndi数据源 依赖服务器 如果服务器挂掉 这个会报错 -->
+<!--	<bean id="datasource7" class="org.springframework.jndi.JndiObjectFactoryBean">
+		<property name="jndiName" value="java:comp/env/jdbc/jndi"></property>
 	</bean>-->
 
+	<bean id="dynamicSourceData" class="com.nojava.test.datasource.MultipleRoutingDataSource" lazy-init="true">
+		<description>动态数据源</description>
+		<!--多数据的集合-->
+		<property name="targetDataSources">
+			<map key-type="java.lang.String" value-type="javax.sql.DataSource">
+				<entry key="datasource01" value-ref="datasource5"></entry>
+				<entry key="datasource02" value-ref="datasource6"></entry>
+			</map>
+		</property>
+		<!--默认数据源-->
+		<property name="defaultTargetDataSource" ref="datasource5"></property>
+	</bean>
+
+	<!--声明式事务管理-->
+	<!--事务管理-->
+	<!--事务管理器 切面 -->
+	<bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="dynamicSourceData"/>
+	</bean>
+	<!--事务拦截器-->
+	<tx:advice id="txadvice" transaction-manager="transactionManager">
+		<tx:attributes>
+			<!--<tx:method name="*" no-rollback-for="com.nojava.TestException"/>-->
+			<tx:method name="*" propagation="REQUIRED" rollback-for="Exception"/>
+			<tx:method name="find*" read-only="true"/>
+		</tx:attributes>
+	</tx:advice>
+	<!--事务aop-->
+	<aop:config proxy-target-class="true">
+		<aop:pointcut id="txPointcut" expression="execution(* com.nojava.service..*.*(..))"/>
+		<aop:advisor advice-ref="txadvice" pointcut-ref="txPointcut"></aop:advisor>
+	</aop:config>
 
 </beans>

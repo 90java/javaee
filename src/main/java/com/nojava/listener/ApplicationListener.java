@@ -10,20 +10,20 @@ public class ApplicationListener implements ServletContextListener,ServletContex
 	@Override
 	public void contextInitialized(ServletContextEvent sce) {
 //		sce.getServletContext();
-		System.out.println("appliction对象被创建");
+		System.out.println("web.xml  appliction对象被创建");
 	}
 
 	@Override
 	public void contextDestroyed(ServletContextEvent sce) {
 //		sce.getServletContext();
-		System.out.println("appliction对象被销毁");
+		System.out.println("web.xml  appliction对象被销毁");
 	}
 
 	@Override
 	public void attributeAdded(ServletContextAttributeEvent scae) {
 		String name = scae.getName();
 		Object value = scae.getValue();
-		System.out.print("appliction attributeAdded ");
+		System.out.print("web.xml  appliction attributeAdded:");
 		System.out.println(name+" : "+value);
 	}
 
@@ -31,7 +31,7 @@ public class ApplicationListener implements ServletContextListener,ServletContex
 	public void attributeRemoved(ServletContextAttributeEvent scae) {
 		String name = scae.getName();
 		Object value = scae.getValue();
-		System.out.print("appliction attributeRemoved ");
+		System.out.print("web.xml  appliction attributeRemoved:");
 		System.out.println(name+" : "+value);
 		
 	}
@@ -40,7 +40,7 @@ public class ApplicationListener implements ServletContextListener,ServletContex
 	public void attributeReplaced(ServletContextAttributeEvent scae) {
 		String name = scae.getName();
 		Object value = scae.getValue();
-		System.out.print("appliction attributeReplaced ");
+		System.out.print("web.xml  appliction attributeReplaced: ");
 		System.out.println(name+" : "+value);
 		
 	}

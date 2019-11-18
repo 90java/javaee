@@ -19,12 +19,12 @@ public class StaticClassTest {
     }
 
     private static void inita() {
-        System.out.println("开始");
+        System.out.println("StaticClassTest开始");
         a.add("1");
         a.add("1");
         a.add("1");
         a.add("1");
-        System.out.println("结束");
+        System.out.println("StaticClassTest结束");
     }
 
     public static void a(){

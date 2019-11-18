@@ -81,7 +81,7 @@
 		<aop:advisor advice-ref="beforeAdvice" pointcut-ref="myPointCut"></aop:advisor>
 	</aop:config>
 
-
+	<!--切面类-->
 	<bean id="xmlHandler" class="com.nojava.test.aop.aopconfigXml.XmlHandler">
 	</bean>
 	<!--2,<aop:pointcut>+<aop:aspect>+<aop:after method="" />-->

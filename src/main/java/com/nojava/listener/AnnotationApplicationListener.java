@@ -12,20 +12,20 @@ public class AnnotationApplicationListener implements ServletContextListener,Ser
 	@Override
 	public void contextInitialized(ServletContextEvent sce) {
 //		sce.getServletContext();
-		System.out.println("appliction对象被创建a");
+		System.out.println("注解  appliction对象被创建a");
 	}
 
 	@Override
 	public void contextDestroyed(ServletContextEvent sce) {
 //		sce.getServletContext();
-		System.out.println("appliction对象被销毁a");
+		System.out.println("注解  appliction对象被销毁a");
 	}
 
 	@Override
 	public void attributeAdded(ServletContextAttributeEvent scae) {
 		String name = scae.getName();
 		Object value = scae.getValue();
-		System.out.print("appliction attributeAdded ");
+		System.out.print("注解  appliction attributeAdded ");
 		System.out.println(name+" : "+value);
 	}
 
@@ -33,7 +33,7 @@ public class AnnotationApplicationListener implements ServletContextListener,Ser
 	public void attributeRemoved(ServletContextAttributeEvent scae) {
 		String name = scae.getName();
 		Object value = scae.getValue();
-		System.out.print("appliction attributeRemoved ");
+		System.out.print("注解  appliction attributeRemoved ");
 		System.out.println(name+" : "+value);
 		
 	}
@@ -42,7 +42,7 @@ public class AnnotationApplicationListener implements ServletContextListener,Ser
 	public void attributeReplaced(ServletContextAttributeEvent scae) {
 		String name = scae.getName();
 		Object value = scae.getValue();
-		System.out.print("appliction attributeReplaced ");
+		System.out.print("注解  appliction attributeReplaced ");
 		System.out.println(name+" : "+value);
 		
 	}

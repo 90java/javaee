@@ -4,11 +4,16 @@ import com.mchange.v2.c3p0.ComboPooledDataSource;
 import com.nojava.bean.Student;
 import com.nojava.bean.Teacher;
 import com.nojava.config.SpringConfig;
+import com.nojava.controller.StudentController;
 import com.nojava.event.RainEvent;
+import com.nojava.service.ITestService;
+import com.nojava.service.TestServiceImpl;
 import com.nojava.test.aop.AopTest;
 import com.nojava.test.aop.AopTest2;
 import com.nojava.test.aop.IAopTest;
 import com.nojava.test.aop.annotation.AopConfig;
+import com.nojava.test.datasource.DynamicSwitchDataSouce;
+import com.nojava.test.datasource.HandlerDataSource;
 import oracle.jdbc.pool.OracleConnectionPoolDataSource;
 import org.apache.commons.dbcp.BasicDataSource;
 import org.junit.Test;
@@ -18,6 +23,8 @@ import org.springframework.cglib.proxy.MethodProxy;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
+import javax.naming.Context;
+import javax.naming.InitialContext;
 import javax.sql.DataSource;
 import javax.sql.PooledConnection;
 import java.lang.reflect.InvocationHandler;
@@ -27,6 +34,7 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.Hashtable;
 
 public class SpringTest {
 
@@ -263,6 +271,68 @@ public class SpringTest {
         connection1.close();
         resultSet.close();
         connection.close();
+    }
+
+    @Test
+    public void test14() throws SQLException {
+        //初始化上下文需要用到的工厂类
+        String INITIAL_CONTEXT_FACTORY="weblogic.jndi.WLInitialContextFactory";
+        //WebLogic服务器的访问地址
+        String PROVIDER_URL="t3://127.0.0.1:7001";
+        //WebLogic服务器中的JNDI数据源名称
+        String ORACLE_JNDI_NAME="jdbc/jndi";
+//        String MYSQL_JNDI_NAME="JNDI/MysqlDataSource";
+        //存储从JNDI容器中取出来的数据源
+        DataSource dsOracle = null;
+
+        try {
+            //初始化WebLogic Server的JNDI上下文信息
+            Hashtable<String, String> env = new Hashtable<String, String>();
+            env.put(Context.INITIAL_CONTEXT_FACTORY, INITIAL_CONTEXT_FACTORY);
+            env.put(Context.PROVIDER_URL,PROVIDER_URL);
+            Context ctx = new InitialContext(env);
+            //获取数据源对象
+            dsOracle = (DataSource) ctx.lookup(ORACLE_JNDI_NAME);
+            Connection connection = dsOracle.getConnection();
+            System.out.println(connection);
+            Statement statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery("select * from student");
+            while (resultSet.next()){
+                String string = resultSet.getString(3);
+                System.out.println(string);
+            }
+            resultSet.close();
+            connection.close();
+
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * 多数据源测试
+     * @throws Exception
+     */
+    @Test
+    public void test15() throws Exception {
+        ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("spring_datasource.xml");
+//        ITestService testService = (ITestService)context.getBean("testService");
+//        testService.testService01(new Student());
+        StudentController studentController = (StudentController) context.getBean("studentController");
+        studentController.testService01(new Student());
+    }
+
+    /**
+     * 获取数据源信息
+     * @throws Exception
+     */
+    @Test
+    public void test16() throws Exception {
+//        HandlerDataSource.setDataSouce("datasource01");
+        ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("spring_datasource.xml");
+        DataSource dataSource = (DataSource)context.getBean("dynamicSourceData");
+        System.out.println(dataSource.getConnection().getMetaData().getUserName());
     }
 
 }

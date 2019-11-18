@@ -1,0 +1,8 @@
+select  * from student;
+
+create sequence seq_student
+  increment by 1
+  start with 1
+  maxvalue 99999999999999999999
+	cycle
+	nocache;

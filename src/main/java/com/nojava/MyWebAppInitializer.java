@@ -1,16 +1,21 @@
 package com.nojava;
 
+import com.nojava.bean.Student;
 import com.nojava.config.SpringConfig;
-import com.nojava.service.TestService;
+import com.nojava.service.TestServiceImpl;
 import com.nojava.servlet.ServletTest3;
-import com.nojava.servlet.StaticClassTest;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.web.WebApplicationInitializer;
 import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRegistration;
-import java.util.Arrays;
+import javax.sql.DataSource;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 
 /**
  * https://www.cnblogs.com/vincentren/p/10753217.html
@@ -52,8 +57,40 @@ public class MyWebAppInitializer implements WebApplicationInitializer {
 
 
 //        StaticClassTest.a();
-        TestService testService = (TestService)rootContext.getBean("testService");
-        testService.testService01();
-        
+        TestServiceImpl testService = (TestServiceImpl)rootContext.getBean("testService");
+        try {
+//            testService.testService01(new Student());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+//        try {
+//            test();
+//        } catch (SQLException e) {
+//            e.printStackTrace();
+//        }
+
+
+    }
+
+    /**
+     * 测试weblogic jndi数据源
+     * @throws SQLException
+     */
+    public void test() throws SQLException {
+        ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("spring_datasource.xml");
+        DataSource dataSource = (DataSource)context.getBean("datasource6");
+        Connection connection = dataSource.getConnection();
+        Connection connection1 = dataSource.getConnection();
+        System.out.println(connection);
+        Statement statement = connection.createStatement();
+        ResultSet resultSet = statement.executeQuery("select * from student");
+        while (resultSet.next()){
+            String string = resultSet.getString(3);
+            System.out.println("WebApplicationInitializer:"+string);
+        }
+        connection1.close();
+        resultSet.close();
+        connection.close();
     }
 }

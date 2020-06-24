@@ -2,7 +2,6 @@ package com.nojava.test.datasource;
 
 import com.nojava.bean.Student;
 import com.nojava.controller.StudentController;
-import com.nojava.service.ITestService;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 /**
@@ -11,7 +10,7 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 public class TransTest {
 
     public static void main(String[] args) throws Exception {
-        ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("spring_datasource.xml");
+        ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("spring_dao.xml");
 //        ITestService testService = (ITestService)context.getBean("testService");
 //        testService.testService01(new Student());
 

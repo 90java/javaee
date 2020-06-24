@@ -8,6 +8,10 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
 
+/**
+ * MyWebAppInitializer 类中启动类 onStartup方法
+ * ServletContext 中注册改servlet
+ */
 public class ServletTest3 extends HttpServlet {
 
     @Override

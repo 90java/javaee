@@ -6,6 +6,9 @@ import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 import javax.servlet.annotation.WebListener;
 
+/**
+ * 注解 注册监听器
+ */
 @WebListener("aaa")
 public class AnnotationApplicationListener implements ServletContextListener,ServletContextAttributeListener{
 

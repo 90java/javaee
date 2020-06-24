@@ -5,7 +5,9 @@ import javax.servlet.*;
 import javax.servlet.annotation.WebFilter;
 import javax.servlet.annotation.WebListener;
 import java.io.IOException;
-
+/**
+ * 注解注册过滤器
+ */
 @WebFilter(filterName = "a",urlPatterns = "/*")
 public class AnnotationEncodingFilter2 implements Filter {
 

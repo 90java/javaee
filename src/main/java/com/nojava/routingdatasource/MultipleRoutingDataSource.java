@@ -1,4 +1,4 @@
-package com.nojava.test.datasource;
+package com.nojava.routingdatasource;
 
 import org.springframework.jdbc.datasource.lookup.AbstractRoutingDataSource;
 

@@ -4,6 +4,9 @@ package com.nojava.filter;
 import javax.servlet.*;
 import java.io.IOException;
 
+/**
+ * web.xml注册改过滤器
+ */
 public class EncodingFilter implements Filter {
 
     @Override

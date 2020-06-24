@@ -7,6 +7,9 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
 
+/**
+ * web.xml配置
+ */
 public class ServletTest1 extends HttpServlet {
 
     @Override

@@ -5,6 +5,9 @@ import javax.servlet.ServletContextAttributeListener;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 
+/**
+ * web.xml 中注册
+ */
 public class ApplicationListener implements ServletContextListener,ServletContextAttributeListener{
 
 	@Override

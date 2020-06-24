@@ -8,6 +8,9 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
 
+/**
+ * 注解配置
+ */
 @WebServlet(name = "test2",urlPatterns = "/test2")
 public class ServletTest2 extends HttpServlet {
 

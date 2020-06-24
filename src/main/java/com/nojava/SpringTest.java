@@ -1,19 +1,14 @@
 package com.nojava;
 
-import com.mchange.v2.c3p0.ComboPooledDataSource;
 import com.nojava.bean.Student;
 import com.nojava.bean.Teacher;
 import com.nojava.config.SpringConfig;
 import com.nojava.controller.StudentController;
 import com.nojava.event.RainEvent;
-import com.nojava.service.ITestService;
-import com.nojava.service.TestServiceImpl;
 import com.nojava.test.aop.AopTest;
 import com.nojava.test.aop.AopTest2;
 import com.nojava.test.aop.IAopTest;
 import com.nojava.test.aop.annotation.AopConfig;
-import com.nojava.test.datasource.DynamicSwitchDataSouce;
-import com.nojava.test.datasource.HandlerDataSource;
 import oracle.jdbc.pool.OracleConnectionPoolDataSource;
 import org.apache.commons.dbcp.BasicDataSource;
 import org.junit.Test;
@@ -22,6 +17,7 @@ import org.springframework.cglib.proxy.MethodInterceptor;
 import org.springframework.cglib.proxy.MethodProxy;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.util.Assert;
 
 import javax.naming.Context;
 import javax.naming.InitialContext;
@@ -168,7 +164,7 @@ public class SpringTest {
 
     @Test
     public void test09() throws SQLException {
-        ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("spring_datasource.xml");
+        ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("spring_dao.xml");
         OracleConnectionPoolDataSource dataSource = (OracleConnectionPoolDataSource)context.getBean("datasource1");
         PooledConnection pooledConnection = dataSource.getPooledConnection();
 
@@ -190,7 +186,7 @@ public class SpringTest {
 
     @Test
     public void test10() throws SQLException {
-        ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("spring_datasource.xml");
+        ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("spring_dao.xml");
         BasicDataSource dataSource = (BasicDataSource)context.getBean("datasource2");
 
         System.out.println(dataSource.getNumActive());
@@ -225,7 +221,7 @@ public class SpringTest {
 
     @Test
     public void test11() throws SQLException {
-        ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("spring_datasource.xml");
+        ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("spring_dao.xml");
         DataSource dataSource = (DataSource)context.getBean("datasource3");
         Connection connection = dataSource.getConnection();
         System.out.println(connection);
@@ -241,7 +237,7 @@ public class SpringTest {
 
     @Test
     public void test12() throws SQLException {
-        ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("spring_datasource.xml");
+        ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("spring_dao.xml");
         DataSource dataSource = (DataSource)context.getBean("datasource4");
         Connection connection = dataSource.getConnection();
         System.out.println(connection);
@@ -257,7 +253,7 @@ public class SpringTest {
 
     @Test
     public void test13() throws SQLException {
-        ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("spring_datasource.xml");
+        ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("spring_dao.xml");
         DataSource dataSource = (DataSource)context.getBean("datasource5");
         Connection connection = dataSource.getConnection();
         Connection connection1 = dataSource.getConnection();
@@ -316,7 +312,7 @@ public class SpringTest {
      */
     @Test
     public void test15() throws Exception {
-        ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("spring_datasource.xml");
+        ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("spring_dao.xml");
 //        ITestService testService = (ITestService)context.getBean("testService");
 //        testService.testService01(new Student());
         StudentController studentController = (StudentController) context.getBean("studentController");
@@ -330,9 +326,16 @@ public class SpringTest {
     @Test
     public void test16() throws Exception {
 //        HandlerDataSource.setDataSouce("datasource01");
-        ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("spring_datasource.xml");
+        ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("spring_dao.xml");
         DataSource dataSource = (DataSource)context.getBean("dynamicSourceData");
         System.out.println(dataSource.getConnection().getMetaData().getUserName());
+    }
+
+    @Test
+    public void test17(){
+
+        Assert.hasLength("", "订单号不能为空");
+
     }
 
 }

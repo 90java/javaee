@@ -14,7 +14,7 @@ import org.springframework.context.annotation.Import;
  * @Bean    ==<bean/>
  */
 @Configuration
-@ComponentScan(basePackages = {"com.nojava.service","com.nojava.controller"})
+//@ComponentScan(basePackages = {"com.nojava.service.impl","com.nojava.dao"})
 @Import(SpringMvcConfig.class)
 public class SpringConfig {
     @Bean

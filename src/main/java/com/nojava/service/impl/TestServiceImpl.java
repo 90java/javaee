@@ -1,14 +1,13 @@
-package com.nojava.service;
+package com.nojava.service.impl;
 
 import com.nojava.bean.Student;
 import com.nojava.dao.IStudentDao;
-import com.nojava.test.datasource.DynamicSwitchDataSouce;
+import com.nojava.service.ITestService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.stereotype.Service;
 
-@Service("testService")
-public class TestServiceImpl implements ITestService{
+@Service
+public class TestServiceImpl implements ITestService {
 
     @Autowired
     IStudentDao studentDao;

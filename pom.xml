@@ -48,10 +48,10 @@
 
     <!-- https://mvnrepository.com/artifact/mysql/mysql-connector-java -->
     <dependency>
-      <groupId>mysql</groupId>
-      <artifactId>mysql-connector-java</artifactId>
-      <version>8.0.18</version>
-    </dependency>
+    <groupId>mysql</groupId>
+    <artifactId>mysql-connector-java</artifactId>
+    <version>8.0.18</version>
+  </dependency>
 
     <!-- 该配置jar包为自己下载并上传至本地仓库通过mvn 注意版本问题-->
     <dependency>
@@ -112,6 +112,14 @@
       <groupId>com.alibaba</groupId>
       <artifactId>druid</artifactId>
       <version>1.1.12</version>
+    </dependency>
+
+
+    <!-- https://mvnrepository.com/artifact/com.rabbitmq/amqp-client -->
+    <dependency>
+      <groupId>com.rabbitmq</groupId>
+      <artifactId>amqp-client</artifactId>
+      <version>5.7.3</version>
     </dependency>
 
 

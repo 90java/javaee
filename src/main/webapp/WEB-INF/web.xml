@@ -6,13 +6,10 @@
          version="3.0">
   <display-name>111</display-name>
   <welcome-file-list>
-    <welcome-file>index.html</welcome-file>
-    <welcome-file>index.htm</welcome-file>
     <welcome-file>index.jsp</welcome-file>
-    <welcome-file>default.html</welcome-file>
-    <welcome-file>default.htm</welcome-file>
-    <welcome-file>default.jsp</welcome-file>
   </welcome-file-list>
+
+  <!--上下文属性-->
   <context-param>
     <param-name>param1</param-name>
     <param-value>value1</param-value>
@@ -21,6 +18,8 @@
     <param-name>param2</param-name>
     <param-value>value2</param-value>
   </context-param>
+
+  <!--servlet-->
   <servlet>
     <servlet-name>test1</servlet-name>
     <servlet-class>com.nojava.servlet.ServletTest1</servlet-class>
@@ -30,7 +29,7 @@
     <url-pattern>/test1</url-pattern>
   </servlet-mapping>
 
-
+  <!--过滤器-->
   <filter>
     <filter-name>encodingFilter</filter-name>
     <filter-class>com.nojava.filter.EncodingFilter</filter-class>
@@ -46,18 +45,36 @@
     <listener-class>com.nojava.listener.ApplicationListener</listener-class>
   </listener>
 
+
+  <!--注册spring监听器 spring容器上线问加载-->
   <context-param>
     <param-name>contextConfigLocation</param-name>
     <param-value>
-      classpath:*.xml
+      classpath:spring-service.xml
+      classpath:spring_dao.xml
     </param-value>
   </context-param>
-
+  <!--spring监听器-->
   <listener>
     <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
   </listener>
+  <!--springmvc 前端控制器-->
+  <servlet>
+    <servlet-name>springmvc</servlet-name>
+    <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+    <init-param>
+      <param-name>contextConfigLocation</param-name>
+      <param-value>classpath:spring-web-mvc.xml</param-value>
+    </init-param>
+    <load-on-startup>1</load-on-startup>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>springmvc</servlet-name>
+    <url-pattern>/</url-pattern>
+  </servlet-mapping>
 
 
+  <!--jndi 设置-->
   <resource-ref>
     <description>DB Connection</description>
     <res-ref-name>jdbc/jndi</res-ref-name>

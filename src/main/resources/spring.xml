@@ -10,6 +10,14 @@
 		   http://www.springframework.org/schema/aop
 		   http://www.springframework.org/schema/aop/spring-aop-3.2.xsd">
 
+	<!-- 读取properties文件 -->
+	<!--	<bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">-->
+	<!--		<property name="location">-->
+	<!--			<value>classpath:db.properties</value>-->
+	<!--		</property>-->
+	<!--	</bean>-->
+
+
 	<bean id="student" class="com.nojava.bean.Student">
 		<property name="name" value="aaa"></property>
 		<property name="age" value="1"></property>
@@ -20,19 +28,12 @@
 		<property name="age" value="22"></property>
 	</bean>
 
-	<!-- 读取properties文件 -->
-	<bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
-		<property name="location">
-			<value>classpath:db.properties</value>
-		</property>
-	</bean>
+
 
 	<!--切面类-->
 	<bean id="logger" class="com.nojava.test.aop.MyLogger"></bean>
-
 	<!--配置目标对象-->
 	<bean id="aopTest" class="com.nojava.test.aop.AopTest"></bean>
-
 	<!--前置通知（Before advice）-->
 	<bean id="beforeAdvice" class="com.nojava.test.aop.BeforeAdvice">
 		<property name="logger" ref="logger"></property>
@@ -45,7 +46,6 @@
 	<bean id="aroundAdvice" class="com.nojava.test.aop.AroundAdvice">
 		<property name="logger" ref="logger"></property>
 	</bean>
-
 	<!--抛出异常后通知(After throwing advice)-->
 	<bean id="throwsAdvice" class="com.nojava.test.aop.ThrowsAdvice">
 		<property name="logger" ref="logger"></property>

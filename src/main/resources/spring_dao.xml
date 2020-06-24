@@ -13,8 +13,11 @@
 	   http://www.springframework.org/schema/tx
 	   http://www.springframework.org/schema/tx/spring-tx-3.2.xsd">
 
+	<!--该配置文件主要配置为扫描到包和配置数据源-->
+
 	<context:annotation-config></context:annotation-config>
-	<context:component-scan base-package="com.nojava"></context:component-scan>
+	<context:component-scan base-package="com.nojava.dao"></context:component-scan>
+	<context:component-scan base-package="com.nojava.routingdatasource"></context:component-scan>
 
 
 
@@ -171,24 +174,6 @@
 		<property name="defaultTargetDataSource" ref="datasource5"></property>
 	</bean>
 
-	<!--声明式事务管理-->
-	<!--事务管理-->
-	<!--事务管理器 切面 -->
-	<bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
-		<property name="dataSource" ref="dynamicSourceData"/>
-	</bean>
-	<!--事务拦截器-->
-	<tx:advice id="txadvice" transaction-manager="transactionManager">
-		<tx:attributes>
-			<!--<tx:method name="*" no-rollback-for="com.nojava.TestException"/>-->
-			<tx:method name="*" propagation="REQUIRED" rollback-for="Exception"/>
-			<tx:method name="find*" read-only="true"/>
-		</tx:attributes>
-	</tx:advice>
-	<!--事务aop-->
-	<aop:config proxy-target-class="true">
-		<aop:pointcut id="txPointcut" expression="execution(* com.nojava.service..*.*(..))"/>
-		<aop:advisor advice-ref="txadvice" pointcut-ref="txPointcut"></aop:advisor>
-	</aop:config>
+
 
 </beans>
